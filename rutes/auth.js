@@ -2,7 +2,7 @@ const express = require('express');
 
 const { check } = require('express-validator');
 const { validarCampos } = require('../midelware/validarCampos');
-const { crearUsuario } = require('../controllers/auth');
+const { crearUsuario, startLogin } = require('../controllers/auth');
 //const { loginUsuario } = require('../controllers/auth');
 
 const routerAuth = express.Router();
@@ -11,11 +11,11 @@ const routerAuth = express.Router();
 //para logear usuario
 routerAuth.post('/login',
   [
-    check("emailOrUsername", "El email o nombre de usuario es obligatorio").not().isEmpty(),
+    check("email", "El email es obligatorio").not().isEmpty(),
     check("password", "La contraseña es obligatoria").not().isEmpty(),
     validarCampos
   ],
-  //loginUsuario
+  startLogin
 );
 
 //para crear un nuevo usuario
