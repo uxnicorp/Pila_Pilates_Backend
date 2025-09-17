@@ -62,10 +62,55 @@ const crearUsuario = async (req, res) => {
 
 
 //login del usuario
+const startLogin = async (req, res) => {
+    const {email, password} = req.body
+    try {
+        const user = await Usuario.findOne({email})
+        if (!user){
+            return res.status(401).json({
+                ok: false,
+                msg: "No existe ningún usuario registrado con ese correo electrónico."
+            })
+        }
 
+        const validarPassword = bcryptjs.compareSync(password, user.password)
+        if(!validarPassword){
+            return res.status(401).json({
+                ok: false,
+                msg: "Contraseña inválida."
+            })
+        }
+
+        if (!user.estado){
+            return res.status(403).json({
+                ok: false,
+                msg: "Usuario inhabilitado, contáctese con el administrador"
+            })
+        }
+
+
+        //TOKEN
+        const payload = {user:user}
+        const token = jwt.sign(payload, process.env.SECRET_JWT, {expiresIn:"6h"});
+
+        res.status(200).json({
+            ok: true,
+            user:user,
+            token
+        })
+
+    }
+
+    catch (error) {
+        console.error("error en login", error);
+        res.status(500).json({
+            ok: false,
+            msg: "Error interno del servidor. Por favor contacte al administrador"
+        });
+    }
+}
 
 
 module.exports = {
-    crearUsuario,
-
+    crearUsuario, startLogin,
 };
