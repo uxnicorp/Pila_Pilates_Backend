@@ -25,7 +25,6 @@ routerAuth.post('/new-user',
     check("apellido", "El apellido es obligatorio").not().isEmpty().trim(),
     check("email", "El email es obligatorio").not().isEmpty().isEmail().normalizeEmail(),
     check("telefono", "El teléfono es obligatorio").not().isEmpty().isMobilePhone(),
-    check("userName", "El nombre de usuario es obligatorio").not().isEmpty().trim(),
     check("password", "la contraseña debe ser de minimo 5").isLength({
       min: 5,
     }),

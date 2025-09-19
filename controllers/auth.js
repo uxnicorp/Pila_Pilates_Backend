@@ -5,11 +5,11 @@ const Usuario = require('../models/Usuario');
 
 //crear usuario 
 const crearUsuario = async (req, res) => {
-    const { nombre, apellido, email, userName, password, telefono, } = req.body;
+    const { nombre, apellido, email, password, telefono } = req.body;
 
     try {
         // Validar campos obligatorios
-        if (!nombre || !apellido || !email || !password || !userName || !telefono){
+        if (!nombre || !apellido || !email || !password || !telefono){
             return res.status(400).json({
                 ok: false,
                 msg: "Faltan campos obligatorios"
@@ -30,11 +30,8 @@ const crearUsuario = async (req, res) => {
             nombre,
             apellido,
             email,
-            userName,
-            password, // Será encriptado
-            //rol,   
+            password,
             telefono,
-            //estado // Por defecto activo
         });
 
         // Encriptar contraseña
