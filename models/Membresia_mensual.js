@@ -2,7 +2,7 @@ const { model, Schema } = require('mongoose');
 
 const MembresiaSchema = new Schema({
     usuario: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true
     }, // referencia al usuario dueño de la membresía

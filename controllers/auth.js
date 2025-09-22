@@ -9,7 +9,7 @@ const crearUsuario = async (req, res) => {
 
     try {
         // Validar campos obligatorios
-        if (!nombre || !apellido || !email || !password || !telefono){
+        if (!nombre || !apellido || !email || !password || !telefono) {
             return res.status(400).json({
                 ok: false,
                 msg: "Faltan campos obligatorios"
@@ -60,10 +60,10 @@ const crearUsuario = async (req, res) => {
 
 //login del usuario
 const startLogin = async (req, res) => {
-    const {email, password} = req.body
+    const { email, password } = req.body
     try {
-        const user = await Usuario.findOne({email})
-        if (!user){
+        const user = await Usuario.findOne({ email })
+        if (!user) {
             return res.status(401).json({
                 ok: false,
                 msg: "No existe ningún usuario registrado con ese correo electrónico."
@@ -71,14 +71,14 @@ const startLogin = async (req, res) => {
         }
 
         const validarPassword = bcryptjs.compareSync(password, user.password)
-        if(!validarPassword){
+        if (!validarPassword) {
             return res.status(401).json({
                 ok: false,
                 msg: "Contraseña inválida."
             })
         }
 
-        if (!user.estado){
+        if (!user.estado) {
             return res.status(403).json({
                 ok: false,
                 msg: "Usuario inhabilitado, contáctese con el administrador"
@@ -87,12 +87,16 @@ const startLogin = async (req, res) => {
 
 
         //TOKEN
-        const payload = {user:user}
-        const token = jwt.sign(payload, process.env.SECRET_JWT, {expiresIn:"6h"});
+        const payload = {
+            id: user._id,         // Asegúrate de incluir el ID
+            user: user.email, // o usuario.nombre - lo que uses
+            rol: user.rol
+        }
+        const token = jwt.sign(payload, process.env.SECRET_JWT, { expiresIn: "6h" });
 
         res.status(200).json({
             ok: true,
-            user:user,
+            user: user,
             token
         })
 

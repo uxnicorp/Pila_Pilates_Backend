@@ -40,7 +40,7 @@ const userSchema = new Schema({
     // === Roles y Jerarquía ===
     rol: {
         type: String,
-        enum: ["cliente","admin","empleado","dev"],
+        enum: ["cliente","admin","empleado"],
         default: "cliente"
     },
 

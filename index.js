@@ -26,5 +26,5 @@ app.use(express.json());
 app.use("/auth",require('./rutes/auth'))
 
 //para el admin
-//app.use("/admin",require('./rutes/admin'))
+app.use("/admin",require('./rutes/admin'))
 

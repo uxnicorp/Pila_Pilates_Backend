@@ -2,7 +2,7 @@ const { model, Schema } = require('mongoose');
 
 const ReservaSchema = new Schema({
     usuario: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true
     }, // referencia al usuario que reservó

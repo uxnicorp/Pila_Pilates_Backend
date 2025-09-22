@@ -14,7 +14,7 @@ const TurnoSchema = new Schema({
 
     reservas: [
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'Reserva'
         }
     ],
@@ -27,6 +27,6 @@ const TurnoSchema = new Schema({
 { timestamps: true });
 
 // Índice para buscar turnos rápido por fecha+hora
-TurnoSchema.index({ fecha: 1, hora: 1 }, { unique: true });
+TurnoSchema.index({ fecha: 1, hora_inicio: 1 }, { unique: true });
 
 module.exports = model("Turno", TurnoSchema);
