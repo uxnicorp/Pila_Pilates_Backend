@@ -37,6 +37,9 @@ const userSchema = new Schema({
         required: true
     },
 
+    // Array de playerIds de OneSignal para notificaciones push
+    playerIds: [{ type: String }],
+
     // === Roles y Jerarquía ===
     rol: {
         type: String,
