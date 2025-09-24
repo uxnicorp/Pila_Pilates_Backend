@@ -7,8 +7,9 @@ const ReservaSchema = new Schema({
         required: true
     }, // referencia al usuario que reservó
 
-    // 👤 Snapshot mínimo para el admin (opcional, no duplicamos todo)
-    participante: {
+    // Cliente: snapshot y referencia robusta
+    cliente: {
+        id: { type: Schema.Types.ObjectId, ref: 'Usuario', required: false },
         nombre: { type: String },
         apellido: { type: String }
     },
@@ -23,20 +24,22 @@ const ReservaSchema = new Schema({
         default: false //true: presente - false: ausente
     },
 
-    // Pagos puntuales (ej: si el cliente paga una clase individual)
+    /*
+     pago_unico: Si el cliente paga una clase suelta, acá se guarda el monto, la fecha y el método de pago (por ejemplo: efectivo, tarjeta, transferencia).
+    */
     pago_unico: {
         monto: { type: Number },
         fecha: { type: Date },
-        metodo: { type: String } // ej: 'efectivo', 'tarjeta', 'transferencia'
+        metodo: { type: String }
     },
 
-    // Membresías activas o aplicadas a esta reserva
-    membresias: 
-        {
-            fecha_inicio: { type: Date },
-            fecha_fin: { type: Date },
-        }
-    ,
+    /*
+     membresias: Si el cliente tiene una membresía activa que se aplica a esta reserva, acá se guarda la fecha de inicio y fin de esa membresía.
+    */
+    membresias: {
+        fecha_inicio: { type: Date },
+        fecha_fin: { type: Date },
+    },
 
     //  Info de la clase/turno reservado
     fecha_reserva: { type: Date, required: true },

@@ -8,7 +8,8 @@ const TurnoSchema = new Schema({
     servicio: { type: String, default: "Pilates" }, // opcional si querés manejar otros servicios
 
     profesional: { 
-       nombre: { type: String },
+        id: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
+        nombre: { type: String },
         apellido: { type: String }
     },
 
@@ -22,6 +23,9 @@ const TurnoSchema = new Schema({
 
     //no contemplamos salon en este caso ni la localidad pero pueden estar en un modelo escalable.
     cupo_maximo: { type: Number, default: 5 },
+
+    // Baja lógica: si activo es false, el turno está dado de baja
+    activo: { type: Boolean, default: true },
 
 },
 { timestamps: true });

@@ -17,6 +17,7 @@ const validarJWT = (req, res, next) => {
 
 		req.id = payload.id;
 		req.userName = payload.userName;
+		req.rol = payload.rol; // Añadimos el rol para que controllers puedan distinguir permisos
 	} catch (error) {
 		return res.status(401).json({
 			ok: false,

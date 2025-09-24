@@ -28,3 +28,8 @@ app.use("/auth",require('./rutes/auth'))
 //para el admin
 app.use("/admin",require('./rutes/admin'))
 
+// rutas de turnos (mis turnos segun rol)
+
+app.use('/reserva', require('./rutes/reserva'))
+app.use('/turnos', require('./rutes/turnos'))
+
