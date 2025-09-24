@@ -42,8 +42,8 @@ async function enviarRecordatoriosTurnosDelDia() {
               app_id: process.env.ONESIGNAL_APP_ID,
               include_player_ids: usuario.playerIds,
               contents: { en: mensaje },
-              headings: { en: 'Pilates Fit' },
-              url: '/perfil'
+              headings: { en: 'PipaPilates' },
+              url: '/'
             })
           });
         } catch(err) {
