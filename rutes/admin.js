@@ -5,6 +5,7 @@ const { validarCampos } = require('../midelware/validarCampos');
 const { crearUsuario, startLogin } = require('../controllers/auth');
 const { validarJWTAdmin } = require('../midelware/ValidarJWTAdmin');
 const { crearTurnosEnLote, obtenerEmpleados, cargarTurnos } = require('../controllers/admin');
+const { validarJWT } = require('../midelware/validarJWT');
 //const { loginUsuario } = require('../controllers/auth');
 
 const routerAdmin = express.Router();
@@ -18,7 +19,7 @@ routerAdmin.post('/lote',validarJWTAdmin, crearTurnosEnLote);
 routerAdmin.get('/empleados',validarJWTAdmin, obtenerEmpleados);
 
 //obtener turnos
-routerAdmin.get('/turnos', validarJWTAdmin,cargarTurnos);
+routerAdmin.get('/turnos', validarJWT,cargarTurnos);
 
 
 module.exports = routerAdmin;

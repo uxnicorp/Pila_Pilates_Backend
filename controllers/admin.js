@@ -40,7 +40,7 @@ const crearTurnosEnLote = async (req, res) => {
             });
         }
 
-        // VALIDACIÓN: Verificar campos requeridos
+        // VALIDACIÓN MEJORADA: Verificar campos requeridos
         for (const turno of turnos) {
             if (!turno.fecha || !turno.hora_inicio || !turno.hora_fin || !turno.profesional) {
                 return res.status(400).json({
@@ -49,6 +49,14 @@ const crearTurnosEnLote = async (req, res) => {
                 });
             }
             
+            // VALIDACIÓN MEJORADA del profesional
+            if (!turno.profesional.id && !turno.profesional._id) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'El profesional debe tener un ID válido'
+                });
+            }
+
             if (!turno.profesional.nombre || !turno.profesional.apellido) {
                 return res.status(400).json({
                     ok: false,
@@ -57,19 +65,29 @@ const crearTurnosEnLote = async (req, res) => {
             }
         }
 
-        // PREPARAR DATOS (AHORA SIN CONSULTA A LA BD DE USUARIOS)
-        const turnosACrear = turnos.map(turnoData => ({
-            fecha: new Date(turnoData.fecha),
-            hora_inicio: turnoData.hora_inicio,
-            hora_fin: turnoData.hora_fin,
-            servicio: turnoData.servicio || "Pilates",
-            cupo_maximo: turnoData.cupo_maximo || 5,
-            profesional: {
-                nombre: turnoData.profesional.nombre,
-                apellido: turnoData.profesional.apellido
-            },
-            reservas: []
-        }));
+        // PREPARAR DATOS CORREGIDO
+        const turnosACrear = turnos.map(turnoData => {
+            // CORRECCIÓN PRINCIPAL: Manejar tanto _id como id
+            const profesionalId = turnoData.profesional._id || turnoData.profesional.id;
+            
+            if (!profesionalId) {
+                throw new Error('ID de profesional no encontrado');
+            }
+
+            return {
+                fecha: new Date(turnoData.fecha),
+                hora_inicio: turnoData.hora_inicio,
+                hora_fin: turnoData.hora_fin,
+                servicio: turnoData.servicio || "Pilates",
+                cupo_maximo: turnoData.cupo_maximo || 5,
+                profesional: {
+                    id: profesionalId, // ← CORREGIDO
+                    nombre: turnoData.profesional.nombre,
+                    apellido: turnoData.profesional.apellido
+                },
+                reservas: []
+            };
+        });
 
         // OPERACIÓN ÚNICA EN LA BD
         const turnosCreados = await Turno.insertMany(turnosACrear);
@@ -92,7 +110,7 @@ const crearTurnosEnLote = async (req, res) => {
 
         res.status(500).json({
             ok: false,
-            msg: 'Error inesperado al crear turnos'
+            msg: 'Error inesperado al crear turnos: ' + error.message
         });
     }
 };

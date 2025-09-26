@@ -126,6 +126,40 @@ const obtenerTurnosSegunRol = async (req, res) => {
     }
 }
 
+
+//cargarturnos+reservas
+//mejorar y cambiar en diferentes metodos para vercion final
+const cargarTurnosConReservas = async (req, res) => {
+    try {
+        const turnos = await Turno.find({ activo: true })
+            .populate({
+                path: 'reservas',
+                select: 'cliente.nombre cliente.apellido estado asistencia pago_unico membresias', // Campos que necesitas
+                // Si quieres más datos del usuario que hizo la reserva:
+                populate: {
+                    path: 'usuario',
+                    select: 'nombre apellido email'
+                }
+            })
+            .populate('profesional.id', 'nombre apellido email') // Datos completos del profesional
+            .sort({ fecha: 1, hora_inicio: 1 });
+
+        res.status(200).json({
+            ok: true,
+            msg: "Turnos cargados con reservas completas",
+            turnos,
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: "Error al cargar los turnos",
+        });
+    }
+};
+
+
 // Método para dar de baja lógica un turno (lo marca como inactivo)
 // Usar desde el front: PUT /turnos/baja/:id
 const bajaLogicaTurno = async (req, res) => {
@@ -148,4 +182,5 @@ const bajaLogicaTurno = async (req, res) => {
 module.exports = {
     obtenerTurnosSegunRol,
     bajaLogicaTurno,
+    cargarTurnosConReservas
 };
